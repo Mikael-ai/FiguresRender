@@ -140,6 +140,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="ShapeCreator.h" />
     <ClInclude Include="ShapeDrawer.h" />
+    <ClInclude Include="Shapes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

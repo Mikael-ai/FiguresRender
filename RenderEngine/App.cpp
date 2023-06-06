@@ -1,5 +1,6 @@
 #include "App.h"
 #include "ShapeDrawer.h"
+#include "ShapeCreator.h"
 
 App* App::appInstance = nullptr;
 
@@ -9,7 +10,8 @@ App::App() :
     hInstance(NULL),
     m_hAppWindow(NULL),
     nCmdShow(NULL),
-    m_isRun(false)
+    m_isRun(false),
+    currentShape(Shapes::Triangle)
 {
 }
 
@@ -49,7 +51,7 @@ bool App::init()
     wcex.hInstance = hInstance;
     wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+    wcex.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = L"GLSample";
     wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);;
@@ -74,6 +76,7 @@ bool App::init()
 
     ShowWindow(m_hAppWindow, nCmdShow);
     
+    currentShapeVertices = ShapeCreator::createBasicShape(currentShape);
     m_isRun = true;
 
     return true;
@@ -116,8 +119,7 @@ int App::broadCast()
         else
         {
             /* OpenGL animation code goes here */
-            shapeDrawer.draw(&hDC);
-
+            ShapeDrawer::drawShape(currentShapeVertices, 1.0f, &hDC);
             Sleep(1);
         }
     }

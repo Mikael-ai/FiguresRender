@@ -1,10 +1,14 @@
 #pragma once
 
+#include "Shapes.h"
+#include <vector>
 
 class ShapeDrawer {
 public:
 	ShapeDrawer();
 	~ShapeDrawer();
 	
-	void draw(HDC *hDC);
+	static void drawShape(const std::vector<POINTFLOAT> &vertices,
+						  const float scale,
+						  HDC *hDC);
 };

@@ -1,5 +1,9 @@
 #pragma once
+
 #include "windows.h"
+#include "Shapes.h"
+
+#include <vector>
 
 class App {
 private:
@@ -8,6 +12,7 @@ private:
 
 	HWND m_hAppWindow;
 	bool m_isRun;
+	std::vector<POINTFLOAT> currentShapeVertices;
 
 public:
 	static App *appInstance;
@@ -26,4 +31,6 @@ public:
 
 	HINSTANCE hInstance;
 	int nCmdShow;
+
+	Shapes currentShape;
 };
