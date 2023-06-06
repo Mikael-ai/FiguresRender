@@ -8,8 +8,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    LPSTR lpCmdLine,
                    int nCmdShow)
 {
-    App app(hInstance, nCmdShow);
-    int result = app.init();
+    int result = App::getInstance(hInstance, nCmdShow)->init();
 
     return result;
 }

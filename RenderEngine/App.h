@@ -2,12 +2,16 @@
 #include "windows.h"
 
 class App {
-public:
-	App(HINSTANCE hInstance, 
-		int nCmdShow);
+private:
+	App(HINSTANCE hInstance, int nCmdShow);
 	~App();
 
+public:
+	static App *appInstance;
+
 	int init();
+	static App* getInstance(HINSTANCE hInstance, int nCmdShow);
+
 	void EnableOpenGL(HWND hwnd, HDC *, HGLRC *);
 	void DisableOpenGL(HWND, HDC, HGLRC);
 

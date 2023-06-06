@@ -1,6 +1,8 @@
 #include "App.h"
 #include "ShapeDrawer.h"
 
+App* App::appInstance = nullptr;
+
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 App::App(HINSTANCE hInstance, 
@@ -12,6 +14,11 @@ App::App(HINSTANCE hInstance,
 
 App::~App()
 {
+    if (appInstance)
+    {
+        delete appInstance;
+        appInstance = nullptr;
+    }
 }
 
 int App::init()
@@ -95,6 +102,14 @@ int App::init()
     DestroyWindow(hwnd);
 
     return msg.wParam;
+}
+
+App* App::getInstance(HINSTANCE hInstance, int nCmdShow)
+{
+    if (!appInstance)
+        appInstance = new App(hInstance, nCmdShow);
+
+    return appInstance;
 }
 
 void App::EnableOpenGL(HWND hwnd, HDC *hDC, HGLRC *hRC)
