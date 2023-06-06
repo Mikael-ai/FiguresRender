@@ -3,14 +3,23 @@
 
 class App {
 private:
-	App(HINSTANCE hInstance, int nCmdShow);
+	App();
 	~App();
+
+	HWND m_hAppWindow;
+	bool m_isRun;
 
 public:
 	static App *appInstance;
+	static App *getInstance();
 
-	int init();
-	static App* getInstance(HINSTANCE hInstance, int nCmdShow);
+	void setup(HINSTANCE hInstance, int nCmdShow);
+
+	bool init();
+	bool isRun();
+	int broadCast();
+	void onDestroy();
+
 
 	void EnableOpenGL(HWND hwnd, HDC *, HGLRC *);
 	void DisableOpenGL(HWND, HDC, HGLRC);

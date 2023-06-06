@@ -8,7 +8,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    LPSTR lpCmdLine,
                    int nCmdShow)
 {
-    int result = App::getInstance(hInstance, nCmdShow)->init();
+    App *app = App::getInstance();
+    app->setup(hInstance, nCmdShow);
+    int result = app->init();
 
-    return result;
+    int wParam = 0;
+    while (app->isRun())
+    {
+        wParam = app->broadCast();
+    }
+
+    return wParam;
 }

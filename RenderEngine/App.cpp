@@ -5,10 +5,11 @@ App* App::appInstance = nullptr;
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-App::App(HINSTANCE hInstance, 
-		 int nCmdShow)
-	: hInstance(hInstance), 
-	nCmdShow(nCmdShow)
+App::App() : 
+    hInstance(NULL),
+    m_hAppWindow(NULL),
+    nCmdShow(NULL),
+    m_isRun(false)
 {
 }
 
@@ -21,14 +22,23 @@ App::~App()
     }
 }
 
-int App::init()
+App *App::getInstance()
+{
+    if (!appInstance)
+        appInstance = new App();
+
+    return appInstance;
+}
+
+void App::setup(HINSTANCE hInstance, int nCmdShow)
+{
+    this->hInstance = hInstance;
+    this->nCmdShow = nCmdShow;
+}
+
+bool App::init()
 {
     WNDCLASSEX wcex;
-    HWND hwnd;
-    HDC hDC;
-    HGLRC hRC;
-    MSG msg;
-    BOOL bQuit = FALSE;
 
     /* register window class */
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -46,10 +56,10 @@ int App::init()
 
 
     if (!RegisterClassEx(&wcex))
-        return 0;
+        return false;
 
     /* create main window */
-    hwnd = CreateWindowEx(0,
+    m_hAppWindow = CreateWindowEx(0,
                           L"GLSample",
                           L"OpenGL Sample",
                           WS_OVERLAPPEDWINDOW,
@@ -62,10 +72,27 @@ int App::init()
                           hInstance,
                           NULL);
 
-    ShowWindow(hwnd, nCmdShow);
+    ShowWindow(m_hAppWindow, nCmdShow);
+    
+    m_isRun = true;
+
+    return true;
+}
+
+bool App::isRun()
+{
+    return m_isRun;
+}
+
+int App::broadCast()
+{
+    HDC hDC;
+    HGLRC hRC;
+    MSG msg;
+    BOOL bQuit = FALSE;
 
     /* enable OpenGL for the window */
-    EnableOpenGL(hwnd, &hDC, &hRC);
+    EnableOpenGL(m_hAppWindow, &hDC, &hRC);
 
     ShapeDrawer shapeDrawer;
 
@@ -96,20 +123,16 @@ int App::init()
     }
 
     /* shutdown OpenGL */
-    DisableOpenGL(hwnd, hDC, hRC);
+    DisableOpenGL(m_hAppWindow, hDC, hRC);
 
-    /* destroy the window explicitly */
-    DestroyWindow(hwnd);
+    m_isRun = false;
 
     return msg.wParam;
 }
 
-App* App::getInstance(HINSTANCE hInstance, int nCmdShow)
+void App::onDestroy()
 {
-    if (!appInstance)
-        appInstance = new App(hInstance, nCmdShow);
-
-    return appInstance;
+    DestroyWindow(m_hAppWindow);
 }
 
 void App::EnableOpenGL(HWND hwnd, HDC *hDC, HGLRC *hRC)
@@ -155,11 +178,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (uMsg)
     {
     case WM_CLOSE:
-    PostQuitMessage(0);
-    break;
+    {
+        PostQuitMessage(0);
+        break;
+    }
 
     case WM_DESTROY:
-    return 0;
+    {
+        App::getInstance()->onDestroy();
+        return 0;
+    }
 
     case WM_KEYDOWN:
     {
@@ -173,7 +201,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     break;
 
     default:
-    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    {
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    }
     }
 
     return 0;
