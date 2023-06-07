@@ -11,7 +11,13 @@ private:
 	~App();
 
 	HWND m_hAppWindow;
+	HINSTANCE hInstance;
+	int nCmdShow;
+
 	bool m_isRun;
+
+	short currentEnumId;
+	Shapes currentShape;
 	std::vector<POINTFLOAT> currentShapeVertices;
 
 public:
@@ -25,12 +31,8 @@ public:
 	int broadCast();
 	void onDestroy();
 
+	void nextShape();
 
 	void EnableOpenGL(HWND hwnd, HDC *, HGLRC *);
 	void DisableOpenGL(HWND, HDC, HGLRC);
-
-	HINSTANCE hInstance;
-	int nCmdShow;
-
-	Shapes currentShape;
 };

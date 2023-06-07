@@ -21,6 +21,11 @@ extern const float defaultCircleStartY;
 extern const float defaultCircleRadius;
 extern const float defaultCircleSteps;
 
+extern const float defaultNgonStartX;
+extern const float defaultNgonStartY;
+extern const float defaultNgonRadius;
+extern const float defaultNgonSteps;
+
 
 class BaseShape {
 public:
@@ -48,18 +53,20 @@ public:
 	std::vector<POINTFLOAT> createShape(const std::unordered_map<std::string, float> &data) override;
 };
 
-class CircleShape : public BaseShape
+class NgonShape : public BaseShape
 {
 public:
-	CircleShape();
-	~CircleShape();
+	NgonShape();
+	~NgonShape();
 
 	std::vector<POINTFLOAT> createShape(const std::unordered_map<std::string, float> &data) override;
 };
 
-
 class ShapeFabric
 {
 public:
+	ShapeFabric();
+	~ShapeFabric();
+
 	static std::vector<POINTFLOAT> createBasicShape(const Shapes shapeType);
 };

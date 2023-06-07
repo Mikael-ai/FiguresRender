@@ -11,7 +11,8 @@ App::App() :
     m_hAppWindow(NULL),
     nCmdShow(NULL),
     m_isRun(false),
-    currentShape(Shapes::Quad)
+    currentShape(Shapes::Quad),
+    currentEnumId(0)
 {
 }
 
@@ -137,6 +138,21 @@ void App::onDestroy()
     DestroyWindow(m_hAppWindow);
 }
 
+void App::nextShape()
+{
+    if (++currentEnumId >= (sizeof(shapesEntry) / sizeof(shapesEntry[0])))
+    {
+        currentEnumId = 0;
+        currentShape = shapesEntry[currentEnumId].shape;
+    }
+    else
+    {
+        currentShape = shapesEntry[currentEnumId].shape;
+    }
+
+    currentShapeVertices = ShapeFabric::createBasicShape(currentShape);
+}
+
 void App::EnableOpenGL(HWND hwnd, HDC *hDC, HGLRC *hRC)
 {
     PIXELFORMATDESCRIPTOR pfd;
@@ -196,8 +212,15 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         switch (wParam)
         {
         case VK_ESCAPE:
-        PostQuitMessage(0);
-        break;
+        {
+            PostQuitMessage(0);
+            break;
+        }
+        case VK_SPACE:
+        {
+            App::getInstance()->nextShape();
+            break;
+        }
         }
     }
     break;

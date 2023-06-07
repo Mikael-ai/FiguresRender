@@ -19,6 +19,11 @@ const float defaultCircleStartY = 0.0f;
 const float defaultCircleRadius = 1.0f;
 const float defaultCircleSteps = 48.0f;
 
+extern const float defaultNgonStartX = 0.0f;
+extern const float defaultNgonStartY = 0.0f;;
+extern const float defaultNgonRadius = 1.0f;
+extern const float defaultNgonSteps = 6.0f;
+
 BaseShape::BaseShape() {}
 BaseShape::~BaseShape() {}
 
@@ -28,9 +33,11 @@ QuadShape::~QuadShape() {}
 TriangleShape::TriangleShape() {}
 TriangleShape::~TriangleShape() {}
 
-CircleShape::CircleShape() {}
-CircleShape::~CircleShape() {}
+NgonShape::NgonShape() {}
+NgonShape::~NgonShape() {}
 
+ShapeFabric::ShapeFabric() {}
+ShapeFabric::~ShapeFabric() {}
 
 std::vector<POINTFLOAT> QuadShape::createShape(const std::unordered_map<std::string, float> &data)
 {
@@ -71,7 +78,7 @@ std::vector<POINTFLOAT> TriangleShape::createShape(const std::unordered_map<std:
 	return vertices;
 }
 
-std::vector<POINTFLOAT> CircleShape::createShape(const std::unordered_map<std::string, float> &data)
+std::vector<POINTFLOAT> NgonShape::createShape(const std::unordered_map<std::string, float> &data)
 {
 	const float startX = data.at("startX");
 	const float startY = data.at("startY");
@@ -123,7 +130,16 @@ std::vector<POINTFLOAT> ShapeFabric::createBasicShape(const Shapes shapeType)
 		data["radius"] = defaultCircleRadius;
 		data["steps"] = defaultCircleSteps;
 
-		return CircleShape().createShape(data);
+		return NgonShape().createShape(data);
+	}
+	case Shapes::Ngon:
+	{
+		data["startX"] = defaultNgonStartX;
+		data["startY"] = defaultNgonStartY;
+		data["radius"] = defaultNgonRadius;
+		data["steps"] = defaultNgonSteps;
+
+		return NgonShape().createShape(data);
 	}
 	}
 

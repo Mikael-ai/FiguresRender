@@ -1,9 +1,23 @@
 #pragma once
 
 
-static enum Shapes {
+enum Shapes {
 	Quad,
 	Triangle,
 	Circle,
-	NGon
+	Ngon
+};
+
+struct ShapesEntry
+{
+	short id;
+	Shapes shape;
+};
+
+const ShapesEntry shapesEntry[]
+{
+	{ 0, Quad },
+	{ 1, Triangle },
+	{ 2, Circle },
+	{ 3, Ngon }
 };
