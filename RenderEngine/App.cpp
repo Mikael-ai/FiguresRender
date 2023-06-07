@@ -2,6 +2,9 @@
 #include "ShapeDrawer.h"
 #include "ShapeCreator.h"
 
+#define DEFAULT_WINDOW_WIDTH 600
+#define DEFAULT_WINDOW_HEIGHT 600
+
 App *App::appInstance = nullptr;
 
 LRESULT CALLBACK WindowProc(HWND hwnd, 
@@ -58,7 +61,7 @@ bool App::init()
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
     wcex.lpszMenuName = NULL;
-    wcex.lpszClassName = L"GLSample";
+    wcex.lpszClassName = L"Engine";
     wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);;
 
 
@@ -66,13 +69,13 @@ bool App::init()
         return false;
 
     m_hAppWindow = CreateWindowEx(0,
-                                  L"GLSample",
-                                  L"OpenGL Sample",
+                                  L"Engine",
+                                  L"Engine",
                                   WS_OVERLAPPEDWINDOW,
                                   CW_USEDEFAULT,
                                   CW_USEDEFAULT,
-                                  512,
-                                  512,
+                                  DEFAULT_WINDOW_WIDTH,
+                                  DEFAULT_WINDOW_HEIGHT,
                                   NULL,
                                   NULL,
                                   m_hInstance,
