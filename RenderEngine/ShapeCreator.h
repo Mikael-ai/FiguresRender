@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Shapes.h"
 #include <vector>
+#include <string>
+#include <unordered_map>
 
+#include "Shapes.h"
 
 extern const float defaultQuadStartX;
 extern const float defaultQuadStartY;
@@ -14,26 +16,50 @@ extern const float defaultTriangleStartY;
 extern const float defaultTriangleWidth;
 extern const float defaultTriangleHeight;
 
+extern const float defaultCircleStartX;
+extern const float defaultCircleStartY;
+extern const float defaultCircleRadius;
+extern const float defaultCircleSteps;
 
-class ShapeCreator {
+
+class BaseShape {
 public:
-	ShapeCreator();
-	~ShapeCreator();
+	BaseShape();
+	~BaseShape();
 
-	static std::vector<POINTFLOAT> createBasicShape(const Shapes shape);
+	virtual std::vector<POINTFLOAT> createShape(const std::unordered_map<std::string, float> &data) = 0;
+};
 
-	static std::vector<POINTFLOAT> createQuad(const float startX,
-											  const float startY,
-											  const float width,
-											  const float height);
+class QuadShape : public BaseShape
+{
+public:
+	QuadShape();
+	~QuadShape();
 
-	static std::vector<POINTFLOAT> createTriangle(const float startX,
-												  const float startY,
-												  const float width,
-												  const float height);
+	std::vector<POINTFLOAT> createShape(const std::unordered_map<std::string, float> &data) override;
+};
 
-	static std::vector<POINTFLOAT> createCircle(const float startX,
-												const float startY,
-												const float radius,
-												const float steps);
+class TriangleShape : public BaseShape
+{
+public:
+	TriangleShape();
+	~TriangleShape();
+
+	std::vector<POINTFLOAT> createShape(const std::unordered_map<std::string, float> &data) override;
+};
+
+class CircleShape : public BaseShape
+{
+public:
+	CircleShape();
+	~CircleShape();
+
+	std::vector<POINTFLOAT> createShape(const std::unordered_map<std::string, float> &data) override;
+};
+
+
+class ShapeFabric
+{
+public:
+	static std::vector<POINTFLOAT> createBasicShape(const Shapes shapeType);
 };

@@ -2,16 +2,16 @@
 #include "ShapeDrawer.h"
 #include "ShapeCreator.h"
 
-App* App::appInstance = nullptr;
+App *App::appInstance = nullptr;
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-App::App() : 
+App::App() :
     hInstance(NULL),
     m_hAppWindow(NULL),
     nCmdShow(NULL),
     m_isRun(false),
-    currentShape(Shapes::Circle)
+    currentShape(Shapes::Quad)
 {
 }
 
@@ -62,21 +62,21 @@ bool App::init()
 
     /* create main window */
     m_hAppWindow = CreateWindowEx(0,
-                          L"GLSample",
-                          L"OpenGL Sample",
-                          WS_OVERLAPPEDWINDOW,
-                          CW_USEDEFAULT,
-                          CW_USEDEFAULT,
-                          512,
-                          512,
-                          NULL,
-                          NULL,
-                          hInstance,
-                          NULL);
+                                  L"GLSample",
+                                  L"OpenGL Sample",
+                                  WS_OVERLAPPEDWINDOW,
+                                  CW_USEDEFAULT,
+                                  CW_USEDEFAULT,
+                                  512,
+                                  512,
+                                  NULL,
+                                  NULL,
+                                  hInstance,
+                                  NULL);
 
     ShowWindow(m_hAppWindow, nCmdShow);
-    
-    currentShapeVertices = ShapeCreator::createBasicShape(currentShape);
+
+    currentShapeVertices = ShapeFabric::createBasicShape(currentShape);
     m_isRun = true;
 
     return true;

@@ -14,50 +14,31 @@ const float defaultTriangleStartY = 0.0f;
 const float defaultTriangleWidth = 1.0f;
 const float defaultTriangleHeight = 1.0f;
 
+const float defaultCircleStartX = 0.0f;
+const float defaultCircleStartY = 0.0f;
+const float defaultCircleRadius = 1.0f;
+const float defaultCircleSteps = 48.0f;
 
-ShapeCreator::ShapeCreator()
+BaseShape::BaseShape() {}
+BaseShape::~BaseShape() {}
+
+QuadShape::QuadShape() {}
+QuadShape::~QuadShape() {}
+
+TriangleShape::TriangleShape() {}
+TriangleShape::~TriangleShape() {}
+
+CircleShape::CircleShape() {}
+CircleShape::~CircleShape() {}
+
+
+std::vector<POINTFLOAT> QuadShape::createShape(const std::unordered_map<std::string, float> &data)
 {
-}
+	const float startX = data.at("startX");
+	const float startY = data.at("startY");
+	const float width = data.at("width");
+	const float height = data.at("height");
 
-ShapeCreator::~ShapeCreator()
-{
-}
-
-std::vector<POINTFLOAT> ShapeCreator::createBasicShape(const Shapes shape)
-{
-	switch (shape)
-	{
-	case Shapes::Quad:
-	{
-		return createQuad(defaultQuadStartX,
-						  defaultQuadStartY,
-						  defaultQuadWidth,
-						  defaultQuadHeight);
-	}
-	case Shapes::Triangle:
-	{
-		return createTriangle(defaultTriangleStartX, 
-							  defaultTriangleStartY, 
-							  defaultTriangleWidth, 
-							  defaultTriangleHeight);
-	}
-	case Shapes::Circle:
-	{
-		return createCircle(defaultTriangleStartX,
-							  defaultTriangleStartY,
-							  1,
-							  10);
-	}
-	}
-
-	return std::vector<POINTFLOAT>();
-}
-
-std::vector<POINTFLOAT> ShapeCreator::createQuad(const float startX,
-												 const float startY, 
-												 const float width, 
-												 const float height)
-{
 	const float halfOfWidth = width * 0.5f;
 	const float halfOfHeight = height * 0.5f;
 
@@ -71,11 +52,13 @@ std::vector<POINTFLOAT> ShapeCreator::createQuad(const float startX,
 	return vertices;
 }
 
-std::vector<POINTFLOAT> ShapeCreator::createTriangle(const float startX,
-													 const float startY, 
-													 const float width, 
-													 const float height)
+std::vector<POINTFLOAT> TriangleShape::createShape(const std::unordered_map<std::string, float> &data)
 {
+	const float startX = data.at("startX");
+	const float startY = data.at("startY");
+	const float width = data.at("width");
+	const float height = data.at("height");
+
 	const float halfOfWidth = width * 0.5f;
 	const float halfOfHeight = height * 0.5f;
 
@@ -88,11 +71,13 @@ std::vector<POINTFLOAT> ShapeCreator::createTriangle(const float startX,
 	return vertices;
 }
 
-std::vector<POINTFLOAT> ShapeCreator::createCircle(const float startX,
-												   const float startY,
-												   const float radius,
-												   const float steps)
+std::vector<POINTFLOAT> CircleShape::createShape(const std::unordered_map<std::string, float> &data)
 {
+	const float startX = data.at("startX");
+	const float startY = data.at("startY");
+	const float radius = data.at("radius");
+	const float steps = data.at("steps");
+
 	const float halfOfRadius = radius * 0.5f;
 	const float angle = 3.14159265358979323846 * 2 / steps;
 	std::vector<POINTFLOAT> vertices;
@@ -101,9 +86,46 @@ std::vector<POINTFLOAT> ShapeCreator::createCircle(const float startX,
 	vertices.push_back({ startX , startY });
 	for (short i = 0; i <= steps; ++i)
 	{
-		vertices.push_back({ halfOfRadius * sin(angle*i),
-						     halfOfRadius * cos(angle * i) });
+		vertices.push_back({ halfOfRadius * sin(angle * i),
+							 halfOfRadius * cos(angle * i) });
 	}
 
 	return vertices;
+}
+
+std::vector<POINTFLOAT> ShapeFabric::createBasicShape(const Shapes shapeType)
+{
+	std::unordered_map<std::string, float> data;
+	switch (shapeType)
+	{
+	case Shapes::Quad:
+	{
+		data["startX"] = defaultQuadStartX;
+		data["startY"] = defaultQuadStartY;
+		data["width"] = defaultQuadWidth;
+		data["height"] = defaultQuadHeight;
+
+		return QuadShape().createShape(data);
+	}
+	case Shapes::Triangle:
+	{
+		data["startX"] = defaultTriangleStartX;
+		data["startY"] = defaultTriangleStartY;
+		data["width"] = defaultTriangleWidth;
+		data["height"] = defaultTriangleHeight;
+
+		return TriangleShape().createShape(data);
+	}
+	case Shapes::Circle:
+	{
+		data["startX"] = defaultCircleStartX;
+		data["startY"] = defaultCircleStartY;
+		data["radius"] = defaultCircleRadius;
+		data["steps"] = defaultCircleSteps;
+
+		return CircleShape().createShape(data);
+	}
+	}
+
+	return std::vector<POINTFLOAT>();
 }
