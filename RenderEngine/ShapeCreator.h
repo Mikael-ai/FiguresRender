@@ -31,4 +31,9 @@ public:
 												  const float startY,
 												  const float width,
 												  const float height);
+
+	static std::vector<POINTFLOAT> createCircle(const float startX,
+												const float startY,
+												const float radius,
+												const float steps);
 };

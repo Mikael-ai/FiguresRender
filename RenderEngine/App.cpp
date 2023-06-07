@@ -11,7 +11,7 @@ App::App() :
     m_hAppWindow(NULL),
     nCmdShow(NULL),
     m_isRun(false),
-    currentShape(Shapes::Triangle)
+    currentShape(Shapes::Circle)
 {
 }
 
