@@ -27,7 +27,8 @@ extern const float defaultNgonRadius;
 extern const float defaultNgonSteps;
 
 
-class BaseShape {
+class BaseShape 
+{
 public:
 	BaseShape();
 	~BaseShape();

@@ -1,7 +1,8 @@
 #pragma once
 
 
-enum Shapes {
+enum Shapes 
+{
 	Quad,
 	Triangle,
 	Circle,

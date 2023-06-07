@@ -22,6 +22,8 @@ void ShapeDrawer::drawShape(const std::vector<POINTFLOAT> &vertices,
     glClearColor(0.85f, 0.6f, 0.6f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    glLoadIdentity();
+    glScalef(scale, scale, scale);
     glPushMatrix();
     
     glBegin(GL_TRIANGLE_FAN);

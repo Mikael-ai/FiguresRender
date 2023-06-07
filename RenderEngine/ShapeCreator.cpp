@@ -1,8 +1,11 @@
 #include <windows.h>
 #include <gl/gl.h>
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+
 #include "ShapeCreator.h"
-#include <cmath>
 
 const float defaultQuadStartX = 0.0f;
 const float defaultQuadStartY = 0.0f;
@@ -43,17 +46,14 @@ std::vector<POINTFLOAT> QuadShape::createShape(const std::unordered_map<std::str
 {
 	const float startX = data.at("startX");
 	const float startY = data.at("startY");
-	const float width = data.at("width");
-	const float height = data.at("height");
-
-	const float halfOfWidth = width * 0.5f;
-	const float halfOfHeight = height * 0.5f;
+	const float width  = data.at("width");
+	const float height = data.at("height");;
 
 	std::vector<POINTFLOAT> vertices = {
-		{ startX - halfOfWidth,	startY + halfOfHeight }, // Top left
-		{ startX + halfOfWidth, startY + halfOfHeight }, // Top right
-		{ startX + halfOfWidth,	startY - halfOfHeight }, // Bottom right
-		{ startX - halfOfWidth,	startY - halfOfHeight }  // Bottom left
+		{ startX - width, startY + height }, // Top left
+		{ startX + width, startY + height }, // Top right
+		{ startX + width, startY - height }, // Bottom right
+		{ startX - width, startY - height }  // Bottom left
 	};
 
 	return vertices;
@@ -63,16 +63,13 @@ std::vector<POINTFLOAT> TriangleShape::createShape(const std::unordered_map<std:
 {
 	const float startX = data.at("startX");
 	const float startY = data.at("startY");
-	const float width = data.at("width");
+	const float width  = data.at("width");
 	const float height = data.at("height");
 
-	const float halfOfWidth = width * 0.5f;
-	const float halfOfHeight = height * 0.5f;
-
 	std::vector<POINTFLOAT> vertices = {
-		{ startX,		        startY + halfOfHeight },
-		{ startX - halfOfWidth, startY - halfOfHeight },
-		{ startX + halfOfWidth, startY - halfOfHeight }
+		{ startX,		  startY + height },
+		{ startX - width, startY - height },
+		{ startX + width, startY - height }
 	};
 
 	return vertices;
@@ -83,18 +80,17 @@ std::vector<POINTFLOAT> NgonShape::createShape(const std::unordered_map<std::str
 	const float startX = data.at("startX");
 	const float startY = data.at("startY");
 	const float radius = data.at("radius");
-	const float steps = data.at("steps");
+	const float steps  = data.at("steps");
 
-	const float halfOfRadius = radius * 0.5f;
-	const float angle = 3.14159265358979323846 * 2 / steps;
 	std::vector<POINTFLOAT> vertices;
 	vertices.reserve(sizeof(POINTFLOAT) * steps);
-
 	vertices.push_back({ startX , startY });
+
+	const float angle = M_PI * 2.0f / steps;
 	for (short i = 0; i <= steps; ++i)
 	{
-		vertices.push_back({ halfOfRadius * sin(angle * i),
-							 halfOfRadius * cos(angle * i) });
+		vertices.push_back({ radius * sin(angle * i),
+							 radius * cos(angle * i) });
 	}
 
 	return vertices;
@@ -109,7 +105,7 @@ std::vector<POINTFLOAT> ShapeFabric::createBasicShape(const Shapes shapeType)
 	{
 		data["startX"] = defaultQuadStartX;
 		data["startY"] = defaultQuadStartY;
-		data["width"] = defaultQuadWidth;
+		data["width"]  = defaultQuadWidth;
 		data["height"] = defaultQuadHeight;
 
 		return QuadShape().createShape(data);
@@ -118,7 +114,7 @@ std::vector<POINTFLOAT> ShapeFabric::createBasicShape(const Shapes shapeType)
 	{
 		data["startX"] = defaultTriangleStartX;
 		data["startY"] = defaultTriangleStartY;
-		data["width"] = defaultTriangleWidth;
+		data["width"]  = defaultTriangleWidth;
 		data["height"] = defaultTriangleHeight;
 
 		return TriangleShape().createShape(data);
@@ -128,7 +124,7 @@ std::vector<POINTFLOAT> ShapeFabric::createBasicShape(const Shapes shapeType)
 		data["startX"] = defaultCircleStartX;
 		data["startY"] = defaultCircleStartY;
 		data["radius"] = defaultCircleRadius;
-		data["steps"] = defaultCircleSteps;
+		data["steps"]  = defaultCircleSteps;
 
 		return NgonShape().createShape(data);
 	}
@@ -137,7 +133,7 @@ std::vector<POINTFLOAT> ShapeFabric::createBasicShape(const Shapes shapeType)
 		data["startX"] = defaultNgonStartX;
 		data["startY"] = defaultNgonStartY;
 		data["radius"] = defaultNgonRadius;
-		data["steps"] = defaultNgonSteps;
+		data["steps"]  = defaultNgonSteps;
 
 		return NgonShape().createShape(data);
 	}

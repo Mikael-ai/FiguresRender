@@ -3,7 +3,8 @@
 #include "Shapes.h"
 #include <vector>
 
-class ShapeDrawer {
+class ShapeDrawer 
+{
 public:
 	ShapeDrawer();
 	~ShapeDrawer();

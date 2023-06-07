@@ -5,20 +5,23 @@
 
 #include <vector>
 
-class App {
+class App 
+{
 private:
 	App();
 	~App();
 
 	HWND m_hAppWindow;
-	HINSTANCE hInstance;
-	int nCmdShow;
+	HINSTANCE m_hInstance;
+	int m_nCmdShow;
 
 	bool m_isRun;
 
-	short currentEnumId;
-	Shapes currentShape;
-	std::vector<POINTFLOAT> currentShapeVertices;
+	short m_currentEnumId;
+	Shapes m_currentShape;
+	std::vector<POINTFLOAT> m_currentShapeVertices;
+
+	float m_currentScale;
 
 public:
 	static App *appInstance;
@@ -27,11 +30,13 @@ public:
 	void setup(HINSTANCE hInstance, int nCmdShow);
 
 	bool init();
-	bool isRun();
+	bool isRun() const;
 	int broadCast();
 	void onDestroy();
 
 	void nextShape();
+	void setCurrentScale(const float scale);
+	float getCurrentScale() const;
 
 	void EnableOpenGL(HWND hwnd, HDC *, HGLRC *);
 	void DisableOpenGL(HWND, HDC, HGLRC);

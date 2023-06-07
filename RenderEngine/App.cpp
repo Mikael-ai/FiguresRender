@@ -4,15 +4,19 @@
 
 App *App::appInstance = nullptr;
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK WindowProc(HWND hwnd, 
+                            UINT uMsg, 
+                            WPARAM wParam, 
+                            LPARAM lParam);
 
 App::App() :
-    hInstance(NULL),
+    m_hInstance(NULL),
     m_hAppWindow(NULL),
-    nCmdShow(NULL),
+    m_nCmdShow(NULL),
     m_isRun(false),
-    currentShape(Shapes::Quad),
-    currentEnumId(0)
+    m_currentShape(Shapes::Quad),
+    m_currentEnumId(0),
+    m_currentScale(0.5f)
 {
 }
 
@@ -35,8 +39,8 @@ App *App::getInstance()
 
 void App::setup(HINSTANCE hInstance, int nCmdShow)
 {
-    this->hInstance = hInstance;
-    this->nCmdShow = nCmdShow;
+    this->m_hInstance = hInstance;
+    this->m_nCmdShow = nCmdShow;
 }
 
 bool App::init()
@@ -49,7 +53,7 @@ bool App::init()
     wcex.lpfnWndProc = WindowProc;
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
-    wcex.hInstance = hInstance;
+    wcex.hInstance = m_hInstance;
     wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
@@ -72,18 +76,18 @@ bool App::init()
                                   512,
                                   NULL,
                                   NULL,
-                                  hInstance,
+                                  m_hInstance,
                                   NULL);
 
-    ShowWindow(m_hAppWindow, nCmdShow);
+    ShowWindow(m_hAppWindow, m_nCmdShow);
 
-    currentShapeVertices = ShapeFabric::createBasicShape(currentShape);
+    m_currentShapeVertices = ShapeFabric::createBasicShape(m_currentShape);
     m_isRun = true;
 
     return true;
 }
 
-bool App::isRun()
+bool App::isRun() const
 {
     return m_isRun;
 }
@@ -120,7 +124,9 @@ int App::broadCast()
         else
         {
             /* OpenGL animation code goes here */
-            ShapeDrawer::drawShape(currentShapeVertices, 1.0f, &hDC);
+            ShapeDrawer::drawShape(m_currentShapeVertices, 
+                                   m_currentScale, 
+                                   &hDC);
             Sleep(1);
         }
     }
@@ -140,17 +146,27 @@ void App::onDestroy()
 
 void App::nextShape()
 {
-    if (++currentEnumId >= (sizeof(shapesEntry) / sizeof(shapesEntry[0])))
+    if (++m_currentEnumId >= (sizeof(shapesEntry) / sizeof(shapesEntry[0])))
     {
-        currentEnumId = 0;
-        currentShape = shapesEntry[currentEnumId].shape;
+        m_currentEnumId = 0;
+        m_currentShape = shapesEntry[m_currentEnumId].shape;
     }
     else
     {
-        currentShape = shapesEntry[currentEnumId].shape;
+        m_currentShape = shapesEntry[m_currentEnumId].shape;
     }
 
-    currentShapeVertices = ShapeFabric::createBasicShape(currentShape);
+    m_currentShapeVertices = ShapeFabric::createBasicShape(m_currentShape);
+}
+
+void App::setCurrentScale(const float scale)
+{
+    m_currentScale = (scale > 0.0f) ? scale : 1.0f;
+}
+
+float App::getCurrentScale() const
+{
+    return m_currentScale;
 }
 
 void App::EnableOpenGL(HWND hwnd, HDC *hDC, HGLRC *hRC)
@@ -191,7 +207,10 @@ void App::DisableOpenGL(HWND hwnd, HDC hDC, HGLRC hRC)
     ReleaseDC(hwnd, hDC);
 }
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WindowProc(HWND hwnd, 
+                            UINT uMsg, 
+                            WPARAM wParam,
+                            LPARAM lParam)
 {
     switch (uMsg)
     {
@@ -219,6 +238,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case VK_SPACE:
         {
             App::getInstance()->nextShape();
+            break;
+        }
+        case VK_UP:
+        {
+            const float currentScale = App::getInstance()->getCurrentScale();
+            App::getInstance()->setCurrentScale(currentScale + 0.1f);
+            break;
+        }
+        case VK_DOWN:
+        {
+            const float currentScale = App::getInstance()->getCurrentScale();
+            App::getInstance()->setCurrentScale(currentScale - 0.1f);
             break;
         }
         }
