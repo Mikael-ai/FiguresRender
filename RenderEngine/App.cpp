@@ -16,7 +16,8 @@ App::App() :
     m_isRun(false),
     m_currentShape(Shapes::Quad),
     m_currentEnumId(0),
-    m_currentScale(0.5f)
+    m_currentScale(0.5f),
+    m_currentRotation(0.0f)
 {
 }
 
@@ -47,7 +48,6 @@ bool App::init()
 {
     WNDCLASSEX wcex;
 
-    /* register window class */
     wcex.cbSize = sizeof(WNDCLASSEX);
     wcex.style = CS_OWNDC;
     wcex.lpfnWndProc = WindowProc;
@@ -65,7 +65,6 @@ bool App::init()
     if (!RegisterClassEx(&wcex))
         return false;
 
-    /* create main window */
     m_hAppWindow = CreateWindowEx(0,
                                   L"GLSample",
                                   L"OpenGL Sample",
@@ -99,18 +98,14 @@ int App::broadCast()
     MSG msg;
     BOOL bQuit = FALSE;
 
-    /* enable OpenGL for the window */
     EnableOpenGL(m_hAppWindow, &hDC, &hRC);
 
     ShapeDrawer shapeDrawer;
 
-    /* program main loop */
     while (!bQuit)
     {
-        /* check for messages */
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
-            /* handle or dispatch messages */
             if (msg.message == WM_QUIT)
             {
                 bQuit = TRUE;
@@ -123,15 +118,14 @@ int App::broadCast()
         }
         else
         {
-            /* OpenGL animation code goes here */
             ShapeDrawer::drawShape(m_currentShapeVertices, 
-                                   m_currentScale, 
+                                   m_currentScale,
+                                   m_currentRotation,
                                    &hDC);
             Sleep(1);
         }
     }
 
-    /* shutdown OpenGL */
     DisableOpenGL(m_hAppWindow, hDC, hRC);
 
     m_isRun = false;
@@ -169,16 +163,24 @@ float App::getCurrentScale() const
     return m_currentScale;
 }
 
+void App::setCurrentRotation(const float rotation)
+{
+    m_currentRotation = (rotation < abs(360.0f)) ? rotation : 0.0f;
+}
+
+float App::getCurrentRotation() const
+{
+    return m_currentRotation;
+}
+
 void App::EnableOpenGL(HWND hwnd, HDC *hDC, HGLRC *hRC)
 {
     PIXELFORMATDESCRIPTOR pfd;
 
     int iFormat;
 
-    /* get the device context (DC) */
     *hDC = GetDC(hwnd);
 
-    /* set the pixel format for the DC */
     ZeroMemory(&pfd, sizeof(pfd));
 
     pfd.nSize = sizeof(pfd);
@@ -194,7 +196,6 @@ void App::EnableOpenGL(HWND hwnd, HDC *hDC, HGLRC *hRC)
 
     SetPixelFormat(*hDC, iFormat, &pfd);
 
-    /* create and enable the render context (RC) */
     *hRC = wglCreateContext(*hDC);
 
     wglMakeCurrent(*hDC, *hRC);
@@ -250,6 +251,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd,
         {
             const float currentScale = App::getInstance()->getCurrentScale();
             App::getInstance()->setCurrentScale(currentScale - 0.1f);
+            break;
+        }
+        case VK_RIGHT:
+        {
+            const float currentRotation = App::getInstance()->getCurrentRotation();
+            App::getInstance()->setCurrentRotation(currentRotation - 30.0f);
+            break;
+        }
+        case VK_LEFT:
+        {
+            const float currentRotation = App::getInstance()->getCurrentRotation();
+            App::getInstance()->setCurrentRotation(currentRotation + 30.0f);
             break;
         }
         }

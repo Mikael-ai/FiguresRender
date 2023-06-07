@@ -11,5 +11,6 @@ public:
 	
 	static void drawShape(const std::vector<POINTFLOAT> &vertices,
 						  const float scale,
+						  const float rotation,
 						  HDC *hDC);
 };

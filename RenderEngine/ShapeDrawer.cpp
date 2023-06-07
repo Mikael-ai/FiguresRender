@@ -17,6 +17,7 @@ ShapeDrawer::~ShapeDrawer()
 
 void ShapeDrawer::drawShape(const std::vector<POINTFLOAT> &vertices,
                             const float scale, 
+                            const float rotation,
                             HDC *hDC)
 {
     glClearColor(0.85f, 0.6f, 0.6f, 0.0f);
@@ -24,8 +25,10 @@ void ShapeDrawer::drawShape(const std::vector<POINTFLOAT> &vertices,
 
     glLoadIdentity();
     glScalef(scale, scale, scale);
-    glPushMatrix();
+    glRotatef(rotation, 0.0f, 0.0f, 1.0f);
     
+    glPushMatrix();
+
     glBegin(GL_TRIANGLE_FAN);
     glColor3f(0.2f, 0.6f, 0.7f);
     for (const auto &point : vertices)
