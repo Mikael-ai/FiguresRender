@@ -4,7 +4,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-
 #include "ShapeCreator.h"
 
 const float defaultQuadStartX = 0.0f;

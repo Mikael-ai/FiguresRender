@@ -33,6 +33,10 @@ public:
 	BaseShape();
 	~BaseShape();
 
+	/**
+	*  Create shape
+	*  @param data - shape instructions
+	*/
 	virtual std::vector<POINTFLOAT> createShape(const std::unordered_map<std::string, float> &data) = 0;
 };
 
@@ -42,6 +46,10 @@ public:
 	QuadShape();
 	~QuadShape();
 
+	/**
+	*  Create shape
+	*  @param data - shape instructions
+	*/
 	std::vector<POINTFLOAT> createShape(const std::unordered_map<std::string, float> &data) override;
 };
 
@@ -51,6 +59,10 @@ public:
 	TriangleShape();
 	~TriangleShape();
 
+	/**
+	*  Create shape
+	*  @param data - shape instructions
+	*/
 	std::vector<POINTFLOAT> createShape(const std::unordered_map<std::string, float> &data) override;
 };
 
@@ -60,6 +72,10 @@ public:
 	NgonShape();
 	~NgonShape();
 
+	/**
+	*  Create shape
+	*  @param data - shape instructions
+	*/
 	std::vector<POINTFLOAT> createShape(const std::unordered_map<std::string, float> &data) override;
 };
 
@@ -69,5 +85,9 @@ public:
 	ShapeFabric();
 	~ShapeFabric();
 
+	/**
+	*  Generate and return basic shape
+	*  @param shapeType - type of a shape
+	*/
 	static std::vector<POINTFLOAT> createBasicShape(const Shapes shapeType);
 };
