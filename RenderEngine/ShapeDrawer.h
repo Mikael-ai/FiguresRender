@@ -6,8 +6,8 @@
 class ShapeDrawer 
 {
 public:
-	ShapeDrawer();
-	~ShapeDrawer();
+	ShapeDrawer() = default;
+	~ShapeDrawer() = default;
 	
 	/**
 	*  Draw shape

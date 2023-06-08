@@ -7,14 +7,6 @@
 #include <vector>
 
 
-ShapeDrawer::ShapeDrawer()
-{
-}
-
-ShapeDrawer::~ShapeDrawer()
-{
-}
-
 void ShapeDrawer::drawShape(const std::vector<POINTFLOAT> &vertices,
                             const float scale, 
                             const float rotation,

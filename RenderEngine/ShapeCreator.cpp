@@ -26,20 +26,6 @@ extern const float defaultNgonStartY = 0.0f;;
 extern const float defaultNgonRadius = 1.0f;
 extern const float defaultNgonSteps = 6.0f;
 
-BaseShape::BaseShape() {}
-BaseShape::~BaseShape() {}
-
-QuadShape::QuadShape() {}
-QuadShape::~QuadShape() {}
-
-TriangleShape::TriangleShape() {}
-TriangleShape::~TriangleShape() {}
-
-NgonShape::NgonShape() {}
-NgonShape::~NgonShape() {}
-
-ShapeFabric::ShapeFabric() {}
-ShapeFabric::~ShapeFabric() {}
 
 std::vector<POINTFLOAT> QuadShape::createShape(const std::unordered_map<std::string, float> &data)
 {

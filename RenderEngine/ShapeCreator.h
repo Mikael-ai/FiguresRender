@@ -30,8 +30,8 @@ extern const float defaultNgonSteps;
 class BaseShape 
 {
 public:
-	BaseShape();
-	~BaseShape();
+	BaseShape() = default;
+	~BaseShape() = default;
 
 	/**
 	*  Create shape
@@ -43,8 +43,8 @@ public:
 class QuadShape : public BaseShape
 {
 public:
-	QuadShape();
-	~QuadShape();
+	QuadShape() = default;
+	~QuadShape() = default;
 
 	/**
 	*  Create shape
@@ -56,8 +56,8 @@ public:
 class TriangleShape : public BaseShape
 {
 public:
-	TriangleShape();
-	~TriangleShape();
+	TriangleShape() = default;
+	~TriangleShape() = default;
 
 	/**
 	*  Create shape
@@ -69,8 +69,8 @@ public:
 class NgonShape : public BaseShape
 {
 public:
-	NgonShape();
-	~NgonShape();
+	NgonShape() = default;
+	~NgonShape() = default;
 
 	/**
 	*  Create shape
@@ -82,8 +82,8 @@ public:
 class ShapeFabric
 {
 public:
-	ShapeFabric();
-	~ShapeFabric();
+	ShapeFabric() = default;
+	~ShapeFabric() = default;
 
 	/**
 	*  Generate and return basic shape
